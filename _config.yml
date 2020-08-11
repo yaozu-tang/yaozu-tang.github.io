@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
-keywords:
-author: John Doe
+title: Yaozu Tang's Blog
+subtitle: --USTCer
+description: nothing new fo now
+keywords: blog
+author: Yaozu Tang
 language: en
-timezone: ''
+timezone: Asia/Shanghi
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: https://yaozu-tang.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
