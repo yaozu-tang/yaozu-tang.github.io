@@ -118,7 +118,9 @@ darkmode: false
 menu:
   home: / || fa fa-home
   about: /about/ || fa fa-user
-  tags: /tags/ || fa fa-tags
+  writing: /categories/writing || fas fa-feather-alt
+  learning: /categories/learning || fab fa-leanpub
+  #tags: /tags/ || fa fa-tags
   categories: /categories/ || fa fa-th
   archives: /archives/ || fa fa-archive
   #schedule: /schedule/ || fa fa-calendar
