@@ -27,6 +27,13 @@
 <meta property="og:site_name" content="Yaozu Tang&#39;s Blog">
 <meta property="og:description" content="Git 本质上是一个（分布式）版本管理系统：抛弃“分布式版本管理”这个看似专业的名词，Git的目的就为了对一个项目从最初到最终的的变化进行细致高效的管理。因为对于    一个大型的项目，开发的过程中会有许多阶段，每个阶段也会出现许多的问题，每次对问题的修订和每一个新的项目阶段就会产生一个新的项目版本，而有些问题是错综复杂&gt;    ，相互联系的，有些阶段也不是线性提升的，所以产生众多盘根错节的版本是">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/commit-and-tree.png">
+<meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/commits-and-parents.png">
+<meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/branch-and-history.png">
+<meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/head-to-master.png">
+<meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/head-to-testing.png">
+<meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/advance-testing.png">
+<meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/advance-master.png">
 <meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/basic-branching-1.png">
 <meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/basic-branching-2.png">
 <meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/basic-branching-3.png">
@@ -41,11 +48,11 @@
 <meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/remote-branches-2.png">
 <meta property="og:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/remote-branches-3.png">
 <meta property="article:published_time" content="2020-08-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-08-12T09:55:51.097Z">
+<meta property="article:modified_time" content="2020-08-12T11:15:16.326Z">
 <meta property="article:author" content="Yaozu Tang">
 <meta property="article:tag" content="learning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/basic-branching-1.png">
+<meta name="twitter:image" content="https://yaozu-tang.github.io/2020/08/12/git-learning/commit-and-tree.png">
 
 <link rel="canonical" href="https://yaozu-tang.github.io/2020/08/12/git-learning/">
 
@@ -205,7 +212,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-08-12 00:00:00 / Modified: 17:55:51" itemprop="dateCreated datePublished" datetime="2020-08-12T00:00:00+08:00">2020-08-12</time>
+              <time title="Created: 2020-08-12 00:00:00 / Modified: 19:15:16" itemprop="dateCreated datePublished" datetime="2020-08-12T00:00:00+08:00">2020-08-12</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -231,93 +238,227 @@
       
         <h1 id="Git-Learning"><a href="#Git-Learning" class="headerlink" title="Git Learning"></a>Git Learning</h1><p>Git 本质上是一个（分布式）版本管理系统：抛弃“分布式版本管理”这个看似专业的名词，Git的目的就为了对一个项目从最初到最终的的变化进行细致高效的管理。因为对于一个大型的项目，开发的过程中会有许多阶段，每个阶段也会出现许多的问题，每次对问题的修订和每一个新的项目阶段就会产生一个新的项目版本，而有些问题是错综复杂，相互联系的，有些阶段也不是线性提升的，所以产生众多盘根错节的版本是极有可能的，更不用说在由多人进行团队项目开发的情况下了。所以，如何对一个项目从初始的雏形到最终的定稿的每一次修订，每一次更改进行细致高效的管理就是一个严重影响开发效率的问题。而Git正是这个问题的最佳解决方法（之一）。其独特的分支体系，将每一次修订产生的版本进行“快照”储存，记录版本发展历史和信息，让项目的开发更加高效。</p>
 <h2 id="Git-基础"><a href="#Git-基础" class="headerlink" title="Git 基础"></a>Git 基础</h2><h3 id="获取Git仓库"><a href="#获取Git仓库" class="headerlink" title="获取Git仓库"></a>获取Git仓库</h3><ol>
-<li><pre><code class="shell">git init
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+ 对现有项目进行管理，创建名为&amp;#96;.git&amp;#96;的子目录，所以拥有这个子目录的文件夹意味着已经使用了git进行项目（版本）管理。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+ &amp;#96;git inti&amp;#96;进行初始化Git仓库不会对文件进行跟踪，也就是实质上这个仓库并没有开始进行项目管理，需要使用：&amp;#96;git add&amp;#96;命令进行对指定文件的跟踪，然后使用&amp;#96;git commit&amp;#96;进行提交：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git add . #对文件夹下所有文件进行跟踪&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git commit -m &amp;#39;initial project version&amp;#39; #提交，并对本次提交做出比标记&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;</code></pre>
+<li><p>初始化已有仓库：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>对现有项目进行管理，创建名为<code>.git</code>的子目录，所以拥有这个子目录的文件夹意味着已经使用了git进行项目（版本）管理。</p>
 </li>
-<li><pre><code class="shell">git clone [url] &lt;your dir&gt;
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 通过链接克隆现有的仓库：Git克隆该Git仓库服务器上所有数据，包括每一个文件和其对应的所有版本（Git本质是版本控制系统），同样会在本地目录下初始化一个&amp;#96;.git&amp;#96;文件夹，存储远程仓库下拉得所有数据。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 通过&amp;#96;git clone&amp;#96;方法克隆的Git仓库已经默认跟踪了该项目中的所有文件，不需要再手动&amp;#96;git add&amp;#96;进行跟踪添加（但是可以删除跟踪一些文件，下文再说）。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;### 记录每次更新到仓库&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;再次回到Git的本质——版本管理系统：所以我们对于项目的每一次修改都要进行版本更行的记录，这样才能让Git来帮我们进行管理。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1. &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   git status&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
-
-+ 查看文件（在Git仓库里）的状态：会显示比如没有跟踪（add）的文件，跟踪（add）了并进行了修改但是没有提交（commit）的文件。
-
-+ `git status -short`或者`git status -s`命令可以输出更简洁紧凑的形式：
-
-  &lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;bash&quot;&gt; git status -s&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; M file_1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;MM file_2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;A  file_3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;M  file_4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;?? file_5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
-
-  + `M` 标记表示文件被修改过：靠右的`M`表示该文件被修改了但是没有放入暂存区；靠左边的`M`表示该文件被修改了并放入了暂存区；`MM`表示文件被修改后放入到暂存区又被修改了（第二次修改没有放入暂存区），所以暂存区和工作区都有修改记录。
-  + `A`标记表示文件被新添加到暂存区中（即add）。
-  + `??`标记表示文件新添加但未进行跟踪。</code></pre>
+<li><p><code>git inti</code>进行初始化Git仓库不会对文件进行跟踪，也就是实质上这个仓库并没有开始进行项目管理，需要使用：<code>git add</code>命令进行对指定文件的跟踪，然后使用<code>git commit</code>进行提交：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git add . <span class="comment">#对文件夹下所有文件进行跟踪</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit -m <span class="string">&#x27;initial project version&#x27;</span> <span class="comment">#提交，并对本次提交做出比标记</span></span></span><br></pre></td></tr></table></figure>
 </li>
-<li><pre><code class="shell">git add &lt;new file or dir&gt;
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 跟踪新文件，将文件暂存，等待提交（commit）——此时使用&amp;#96;git status&amp;#96;会显示&amp;#96;Changes to be committed&amp;#96;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 对于已跟踪的文件，进行修改后，使用&amp;#96;git add&amp;#96;将已修改的文件暂存（进入“暂存区”）——如果修改后没有进行&amp;#96;git add&amp;#96;暂存，此时使用&amp;#96;git status&amp;#96;会显示&amp;#96;Changes not staged for commit&amp;#96;，表示已跟踪文件发生修改，但没有放入暂存区。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + add语句之后接文件或者目录参数，可以实现批量跟踪。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 注意：&amp;#96;git add&amp;#96;记录版本是瞬时的——也就是说只会记录add时刻的版本信息，如果add之后再对文件进行修改，不会对暂存区内的版本有影响，需要再次提交&amp;#96;git add&amp;#96;进行更行暂存&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3. &amp;#96;.gitignore&amp;#96;文件：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 这个文件中列出的所有文件都不会被Git跟踪，例如&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     $ cat .gitignore&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     *.[oa]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     *~&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
-
-+ 具体`.gitignore`文件的书写规则参考[](https://github.com/github/gitignore)</code></pre>
+</ul>
 </li>
-<li><pre><code class="shell">git diff
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + &amp;#96;git diff&amp;#96;用来查看未暂存的文件更新的具体部分&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + &amp;#96;git diff -cached&amp;#96;用来查看已暂存的文件更新的具体部分&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 此命令输出内容语法比较复杂，可有需要再查阅详细教程&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5. &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   git commit&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
+<li><p>克隆仓库：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone [url] &lt;your dir&gt;</span><br></pre></td></tr></table></figure>
 
-+ `git commit -m &#39;comment&#39;`将***暂存区***中的***文件快照***进行提交
-+ 所以文件修改暂存提交的一般步骤是先`git add`暂存再进行`git commit`提交，但是也可以加上`-a`参数进行一步暂存提交：`git commit -a -m &#39;comment&#39;`：此命令会把所有已跟踪过得文件暂存然后一并提交</code></pre>
+<ul>
+<li><p>通过链接克隆现有的仓库：Git克隆该Git仓库服务器上所有数据，包括每一个文件和其对应的所有版本（Git本质是版本控制系统），同样会在本地目录下初始化一个<code>.git</code>文件夹，存储远程仓库下拉得所有数据。</p>
 </li>
-<li><pre><code class="shell">git rm
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 完整从本地和Git中删除文件的步骤：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     + 如果删除之前文件没有修改并添加到暂存区：先手动删除工作目录中的文件&amp;#96;rm file&amp;#96;（此时运行&amp;#96;git status&amp;#96;会显示删除文件操作没有进行暂存&amp;#96;Changes not staged for commit&amp;#96;）；再用&amp;#96;git rm file&amp;#96;在暂存区记录此次删除文件操作（此时运行&amp;#96;git status&amp;#96;会显示删除文件操作等待提交&amp;#96;Changes to be committed&amp;#96;）；再进行提交&amp;#96;git commit&amp;#96;，该文件不再纳入版本管理&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     + 如果删除之前文件进行了修改并且添加到了暂存区：删除命令加&amp;#96;-f&amp;#96;（force）强制删除&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 只从Git仓库中删除，不跟踪但保留本地文件：&amp;#96;git rm --cached file&amp;#96;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7. &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   git mv &amp;lt;file_from&amp;gt; &amp;lt;file_to&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
+<li><p>通过<code>git clone</code>方法克隆的Git仓库已经默认跟踪了该项目中的所有文件，不需要再手动<code>git add</code>进行跟踪添加（但是可以删除跟踪一些文件，下文再说）。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="记录每次更新到仓库"><a href="#记录每次更新到仓库" class="headerlink" title="记录每次更新到仓库"></a>记录每次更新到仓库</h3><p>再次回到Git的本质——版本管理系统：所以我们对于项目的每一次修改都要进行版本更行的记录，这样才能让Git来帮我们进行管理。</p>
+<ol>
+<li><p>获取Git状态：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
 
-+ 此时用`git status`会显示`renamed:    &lt;file_from&gt; -&gt; &lt;file_to&gt;`
-</code></pre>
+<ul>
+<li><p>查看文件（在Git仓库里）的状态：会显示比如没有跟踪（add）的文件，跟踪（add）了并进行了修改但是没有提交（commit）的文件。</p>
+</li>
+<li><p><code>git status -short</code>或者<code>git status -s</code>命令可以输出更简洁紧凑的形式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git status -s</span></span><br><span class="line">M file_1</span><br><span class="line">MM file_2</span><br><span class="line">A  file_3</span><br><span class="line">M  file_4</span><br><span class="line">?? file_5</span><br></pre></td></tr></table></figure></li>
+<li><p><code>M</code> 标记表示文件被修改过：靠右的<code>M</code>表示该文件被修改了但是没有放入暂存区；靠左边的<code>M</code>表示该文件被修改了并放入了暂存区；<code>MM</code>表示文件被修改后放入到暂存区又被修改了（第二次修改没有放入暂存区），所以暂存区和工作区都有修改记录。</p>
+</li>
+<li><p><code>A</code>标记表示文件被新添加到暂存区中（即add）。</p>
+</li>
+<li><p><code>??</code>标记表示文件新添加但未进行跟踪。</p>
+</li>
+</ul>
+</li>
+<li><p>添加文件到暂存区：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add &lt;new file or dir&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>跟踪新文件，将文件暂存，等待提交（commit）——此时使用<code>git status</code>会显示<code>Changes to be committed</code></li>
+<li>对于已跟踪的文件，进行修改后，使用<code>git add</code>将已修改的文件暂存（进入“暂存区”）——如果修改后没有进行<code>git add</code>暂存，此时使用<code>git status</code>会显示<code>Changes not staged for commit</code>，表示已跟踪文件发生修改，但没有放入暂存区。</li>
+<li>add语句之后接文件或者目录参数，可以实现批量跟踪。</li>
+<li>注意：<code>git add</code>记录版本是瞬时的——也就是说只会记录add时刻的版本信息，如果add之后再对文件进行修改，不会对暂存区内的版本有影响，需要再次提交<code>git add</code>进行更行暂存</li>
+</ul>
+</li>
+<li><p><code>.gitignore</code>文件：</p>
+<ul>
+<li><p>这个文件中列出的所有文件都不会被Git跟踪，例如</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat .gitignore</span></span><br><span class="line">*.[oa]</span><br><span class="line">*~</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>具体<code>.gitignore</code>文件的书写规则参考<a target="_blank" rel="noopener" href="https://github.com/github/gitignore"></a></p>
+</li>
+</ul>
+</li>
+<li><p>查看文件改动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>git diff</code>用来查看未暂存的文件更新的具体部分</li>
+<li><code>git diff -cached</code>用来查看已暂存的文件更新的具体部分</li>
+<li>此命令输出内容语法比较复杂，可有需要再查阅详细教程</li>
+</ul>
+</li>
+<li><p>提交暂存区文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>git commit -m &#39;comment&#39;</code>将*<strong>暂存区**<em>中的</em></strong>文件快照***进行提交</li>
+<li>所以文件修改暂存提交的一般步骤是先<code>git add</code>暂存再进行<code>git commit</code>提交，但是也可以加上<code>-a</code>参数进行一步暂存提交：<code>git commit -a -m &#39;comment&#39;</code>：此命令会把所有已跟踪过得文件暂存然后一并提交</li>
+</ul>
+</li>
+<li><p>文件删除：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rm</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>完整从本地和Git中删除文件的步骤：</li>
+<li>如果删除之前文件没有修改并添加到暂存区：先手动删除工作目录中的文件<code>rm file</code>（此时运行<code>git status</code>会显示删除文件操作没有进行暂存<code>Changes not staged for commit</code>）；再用<code>git rm file</code>在暂存区记录此次删除文件操作（此时运行<code>git status</code>会显示删除文件操作等待提交<code>Changes to be committed</code>）；再进行提交<code>git commit</code>，该文件不再纳入版本管理</li>
+<li>如果删除之前文件进行了修改并且添加到了暂存区：删除命令加<code>-f</code>（force）强制删除</li>
+<li>只从Git仓库中删除，不跟踪但保留本地文件：<code>git rm --cached file</code></li>
+</ul>
+</li>
+<li><p>文件移动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git mv &lt;file_from&gt; &lt;file_to&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此时用<code>git status</code>会显示<code>renamed:    &lt;file_from&gt; -&gt; &lt;file_to&gt;</code></li>
+</ul>
 </li>
 </ol>
 <h3 id="撤销操作"><a href="#撤销操作" class="headerlink" title="撤销操作"></a>撤销操作</h3><ol>
-<li><pre><code class="shell">git commit --amend
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+ 此命令将会提交此时暂存区中的文件，并且覆盖（代替）上一次的提交，例如：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git commit -m &amp;#39;initial commit&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git add &amp;lt;new_file&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git commit --amend&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
+<li><p>覆盖提交：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit --amend</span><br></pre></td></tr></table></figure>
 
-  最终只会有最后一次的提交</code></pre>
+<ul>
+<li><p>此命令将会提交此时暂存区中的文件，并且覆盖（代替）上一次的提交，例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git commit -m <span class="string">&#x27;initial commit&#x27;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git add &lt;new_file&gt;</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit --amend</span></span><br></pre></td></tr></table></figure>
+<p>最终只会有最后一次的提交</p>
 </li>
-<li><pre><code class="shell">git reset HEAD &lt;file&gt;
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;+ 此命令可以取消暂存区的&amp;#96;&amp;lt;file&amp;gt;&amp;#96;文件，然后放入工作区，例如&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git add *&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git status&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  On branch master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Changes to be committed:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    (use &amp;quot;git reset HEAD &amp;lt;file&amp;gt;...&amp;quot; to unstage)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          renamed:      README.md   -&amp;gt;    README&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;          modified:     CONTRIBUTING.md&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git reset HEAD CONTRIBUTING.md&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Unstaged changes after reset:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  M   CONTRIBUTING.md&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  $ git status&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  On branch master&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Changes to be committed:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    (use &amp;quot;git reset HEAD &amp;lt;file&amp;gt;...&amp;quot; to unstage)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            renamed:    README.md   -&amp;gt; README&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Changes not staged for commit:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    (use &amp;quot;git add &amp;lt;file&amp;gt;...&amp;quot; to update what will be committed)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    (use &amp;quot;git checkout -- &amp;lt;file&amp;gt;...&amp;quot; to discard changes in working directory)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            modified:   CONTRIBUTING.md&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
-
-  可见将`CONTRIBUTING.md`文件从暂存区取出，放入了工作区修改未暂存的状态</code></pre>
+</ul>
 </li>
-<li><pre><code class="shell">git chekout -- &lt;file&gt;
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 此命令能撤销之前所做的修改&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 注：一般不要使用这个命令&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;### 远程仓库&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1. &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   git remote&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
+<li><p>取消暂存：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset HEAD &lt;file&gt;</span><br></pre></td></tr></table></figure>
 
-+ `git remote`命令会显示已经配置的远程仓库服务器，但是只会显示Git保存的简写（如默认名字origin）
-
-+ `git remote -v`命令会显示远程仓库的URL和Git保存的简写名称，并且会显示你拥有的读（拉取）和写（推送）的权限，例如
-
-  &lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;bash&quot;&gt; git remote -v&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;origin &amp;lt;URL_1&amp;gt; (fetch)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;origin &amp;lt;URL_1&amp;gt; (push)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;koke   &amp;lt;URL_2&amp;gt; (fetch)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;koke   &amp;lt;URL_2&amp;gt; (push)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
-
-+ `git remote add &lt;shortname&gt; &lt;URL&gt;`命令会添加远程服务器仓库，并设置简写名称（不设置的话是默认名称origin）。这个简写名称将可以在命令中用来代替整个URL。
-
-+ `git remote show [remote-name]`命令会列出远程从库的URL与跟踪分支等信息
-
-+ `git remote rename [original-name] [new-name]`将远程仓库`[original-name]`命名为`[new-name]`
-
-+ `git remote rm [remote-name]`可以移除远程仓库</code></pre>
+<ul>
+<li>此命令可以取消暂存区的<code>&lt;file&gt;</code>文件，然后放入工作区，例如<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git add *</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git status</span></span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span><br><span class="line">        renamed:      README.md   -&gt;    README</span><br><span class="line">        modified:     CONTRIBUTING.md</span><br><span class="line"><span class="meta">$</span><span class="bash"> git reset HEAD CONTRIBUTING.md</span></span><br><span class="line">Unstaged changes after reset:</span><br><span class="line">M   CONTRIBUTING.md</span><br><span class="line"><span class="meta">$</span><span class="bash"> git status</span></span><br><span class="line">On branch master</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span><br><span class="line">          renamed:    README.md   -&gt; README</span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line">          modified:   CONTRIBUTING.md</span><br></pre></td></tr></table></figure>
+可见将<code>CONTRIBUTING.md</code>文件从暂存区取出，放入了工作区修改未暂存的状态</li>
+</ul>
 </li>
-<li><pre><code class="shell">git fetch [remote-name]
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 这个命令访问简写名称远程仓库，并从中拉取所有你还没有的数据。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + ***注意：这个命令会将数据拉取到本地仓库，但是不会自动合并或者修改当前的工作，需要手动将其合并入你的工作。***&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3. &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   git pull [remote-name]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
-
-+ 这个命令会自动抓取远程仓库的内容并合并远程分支到当前分支：例如git clone命令会自动设置本地的master分支跟踪远程仓库的默认分支（一般是master，也可以修改为其他的任意分支），在本地master分支运行`git pull`会从跟踪的远程仓库分支拉取数据并自动合并到当前的分支。</code></pre>
+<li><p>撤销修改：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git chekout -- &lt;file&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>此命令能撤销之前所做的修改</li>
+<li>注：一般不要使用这个命令</li>
+</ul>
 </li>
-<li><pre><code class="shell">git push [remote-name] [branch-name]
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;31&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 此命令会将本地的&amp;#96;[branch-name]&amp;#96;分支推送到&amp;#96;[remote-name]&amp;#96;对应的远程服务器上。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + ***注意：当你有克隆服务器的写入权限，并且之前没有人推送过时，此命令才能生效。如果你和他人在同一时间克隆，他们先推送到上游然后你再推送，则你的推送会被拒绝，你需要先将他们的工作拉取下来（&amp;#96;fetch&amp;#96;or&amp;#96;pull&amp;#96;）合并到你的工作才能推送——总结：先pull再push***&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;## Git 分支&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;### 分支介绍&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1. Git仓库对象结构：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + **提交对象**（包含所有提交信息和指向树对象的指针） ——&amp;gt; **树对象**（记录目录结构和blob对象索引） ——&amp;gt; **blob对象**（保存文件快照）&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     ![commit-and-tree](commit-and-tree.png)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2. 多次提交更新版本：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 做修改后再次提交，这次的提交对象会包含一个指向上次提交对象（父对象，旧版本）的指针&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     ![commits-and-parents](commits-and-parents.png)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3. Git分支：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + Git的分支，***本质上就是指向提交对象的可变指针***&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     ![branch-and-history](branch-and-history.png)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     Git的默认分支是&amp;#96;master&amp;#96;，在多次提交后，&amp;#96;master&amp;#96;分支指向最后那个提交对象，它会在每次提交中自动向前（更新的版本）移动&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;### 分支创建和切换&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1. &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   git branch testing&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
+</ol>
+<h3 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h3><ol>
+<li><p>显示远程仓库：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote</span><br></pre></td></tr></table></figure>
 
-+ 此命令会在当前提交的对象上创建一个分支指针
-
-  ![head-to-master](head-to-master.png)
-
-  其中`HEAD`指针***指向当前所在的本地分支***，在上例中，在`master`分支上创建新的`testing`分支不会自动切换到新的分支；`master`和`testing`分支均指向`f30ab`的提交对象</code></pre>
+<ul>
+<li><p><code>git remote</code>命令会显示已经配置的远程仓库服务器，但是只会显示Git保存的简写（如默认名字origin）</p>
 </li>
-<li><pre><code class="shell">git checkout testing
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 此命令让&amp;#96;HEAD&amp;#96;指针指向&amp;#96;testing&amp;#96;分支，即改变当前本地所在分支为&amp;#96;testing&amp;#96;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     ![head-to-testing](head-to-testing.png)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3. &amp;#96;HEAD&amp;#96;分支移动：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + &amp;#96;HEAD&amp;#96;分支会随着提交操作自动向前（更新的版本方向）移动，例如在上例&amp;#96;testing&amp;#96;分支中再进行一次提交：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     $ vim test.rb&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;     $ git commit -a -m &amp;#39;made a change&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
+<li><p><code>git remote -v</code>命令会显示远程仓库的URL和Git保存的简写名称，并且会显示你拥有的读（拉取）和写（推送）的权限，例如</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git remote -v</span></span><br><span class="line">origin &lt;URL_1&gt; (fetch)</span><br><span class="line">origin &lt;URL_1&gt; (push)</span><br><span class="line">koke   &lt;URL_2&gt; (fetch)</span><br><span class="line">koke   &lt;URL_2&gt; (push)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>git remote add &lt;shortname&gt; &lt;URL&gt;</code>命令会添加远程服务器仓库，并设置简写名称（不设置的话是默认名称origin）。这个简写名称将可以在命令中用来代替整个URL。</p>
+</li>
+<li><p><code>git remote show [remote-name]</code>命令会列出远程从库的URL与跟踪分支等信息</p>
+</li>
+<li><p><code>git remote rename [original-name] [new-name]</code>将远程仓库<code>[original-name]</code>命名为<code>[new-name]</code></p>
+</li>
+<li><p><code>git remote rm [remote-name]</code>可以移除远程仓库</p>
+</li>
+</ul>
+</li>
+<li><p>fetch抓取远程数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch [remote-name]</span><br></pre></td></tr></table></figure>
 
-  ![advance-testing](advance-testing.png)
+<ul>
+<li>这个命令访问简写名称远程仓库，并从中拉取所有你还没有的数据。</li>
+<li><strong><em>注意：这个命令会将数据拉取到本地仓库，但是不会自动合并或者修改当前的工作，需要手动将其合并入你的工作。</em></strong></li>
+</ul>
+</li>
+<li><p>pull拉取远程数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull [remote-name]</span><br></pre></td></tr></table></figure>
 
-  可见，`testing`分支向前移动了，而`master`分支没有移动，也就是说，此时对于一个项目而言，`master`分支保留了较旧的版本，而`testing`分支保留了较新的版本
+<ul>
+<li>这个命令会自动抓取远程仓库的内容并合并远程分支到当前分支：例如git clone命令会自动设置本地的master分支跟踪远程仓库的默认分支（一般是master，也可以修改为其他的任意分支），在本地master分支运行<code>git pull</code>会从跟踪的远程仓库分支拉取数据并自动合并到当前的分支。</li>
+</ul>
+</li>
+<li><p>push推送远程数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push [remote-name] [branch-name]</span><br></pre></td></tr></table></figure>
 
-+ 此时若`git checkout`切回`master`分支工作并进行项目提交，就会出现项目的分叉，导致项目朝着不同的方向发展：
+<ul>
+<li>此命令会将本地的<code>[branch-name]</code>分支推送到<code>[remote-name]</code>对应的远程服务器上。</li>
+<li><strong><em>注意：当你有克隆服务器的写入权限，并且之前没有人推送过时，此命令才能生效。如果你和他人在同一时间克隆，他们先推送到上游然后你再推送，则你的推送会被拒绝，你需要先将他们的工作拉取下来（<code>fetch</code>or<code>pull</code>）合并到你的工作才能推送——总结：先pull再push</em></strong></li>
+</ul>
+</li>
+</ol>
+<h2 id="Git-分支"><a href="#Git-分支" class="headerlink" title="Git 分支"></a>Git 分支</h2><h3 id="分支介绍"><a href="#分支介绍" class="headerlink" title="分支介绍"></a>分支介绍</h3><ol>
+<li><p>Git仓库对象结构：</p>
+<ul>
+<li><strong>提交对象</strong>（包含所有提交信息和指向树对象的指针） ——&gt; <strong>树对象</strong>（记录目录结构和blob对象索引） ——&gt; <strong>blob对象</strong>（保存文件快照）<br><img src="commit-and-tree.png" alt="commit-and-tree"></li>
+</ul>
+</li>
+<li><p>多次提交更新版本：</p>
+<ul>
+<li><p>做修改后再次提交，这次的提交对象会包含一个指向上次提交对象（父对象，旧版本）的指针</p>
+<p><img src="commits-and-parents.png" alt="commits-and-parents"></p>
+</li>
+</ul>
+</li>
+<li><p>Git分支：</p>
+<ul>
+<li><p>Git的分支，**<em>本质上就是指向提交对象的可变指针**</em></p>
+<p><img src="branch-and-history.png" alt="branch-and-history"></p>
+<p>Git的默认分支是<code>master</code>，在多次提交后，<code>master</code>分支指向最后那个提交对象，它会在每次提交中自动向前（更新的版本）移动</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="分支创建和切换"><a href="#分支创建和切换" class="headerlink" title="分支创建和切换"></a>分支创建和切换</h3><ol>
+<li><p>创建分支：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch testing</span><br></pre></td></tr></table></figure>
 
-  ![advance-master](advance-master.png)
-</code></pre>
+<ul>
+<li><p>此命令会在当前提交的对象上创建一个分支指针</p>
+<p><img src="head-to-master.png" alt="head-to-master"></p>
+</li>
+</ul>
+<p>其中<code>HEAD</code>指针**<em>指向当前所在的本地分支**</em>，在上例中，在<code>master</code>分支上创建新的<code>testing</code>分支不会自动切换到新的分支；<code>master</code>和<code>testing</code>分支均指向<code>f30ab</code>的提交对象</p>
+</li>
+<li><p>切换分支：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout testing</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>此命令让<code>HEAD</code>指针指向<code>testing</code>分支，即改变当前本地所在分支为<code>testing</code></p>
+<p><img src="head-to-testing.png" alt="head-to-testing"></p>
+</li>
+</ul>
+</li>
+<li><p><code>HEAD</code>分支移动：</p>
+<ul>
+<li><p><code>HEAD</code>分支会随着提交操作自动向前（更新的版本方向）移动，例如在上例<code>testing</code>分支中再进行一次提交：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> vim test.rb</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit -a -m <span class="string">&#x27;made a change&#x27;</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="advance-testing.png" alt="advance-testing"></p>
+</li>
+</ul>
+<p>可见，<code>testing</code>分支向前移动了，而<code>master</code>分支没有移动，也就是说，此时对于一个项目而言，<code>master</code>分支保留了较旧的版本，而<code>testing</code>分支保留了较新的版本</p>
+<ul>
+<li><p>此时若<code>git checkout</code>切回<code>master</code>分支工作并进行项目提交，就会出现项目的分叉，导致项目朝着不同的方向发展：</p>
+<p><img src="advance-master.png" alt="advance-master"></p>
+</li>
+</ul>
 </li>
 </ol>
 <h3 id="分支的新建与合并——分支流程初探"><a href="#分支的新建与合并——分支流程初探" class="headerlink" title="分支的新建与合并——分支流程初探"></a>分支的新建与合并——分支流程初探</h3><ol>
@@ -368,15 +509,34 @@
 </li>
 </ol>
 <h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><ol>
-<li><pre><code class="shell">git branch
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 此命令会得到当前所有分支的列表，并用&amp;#96;*&amp;#96;标记出当前所在分支（&amp;#96;HEAD&amp;#96;指针指向的分支）&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2. &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   git branch -v&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
+<li><p>分支列表：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure>
 
-+ 此命令会列出所有分支，并显示每个分支最后一次的提交</code></pre>
+<ul>
+<li>此命令会得到当前所有分支的列表，并用<code>*</code>标记出当前所在分支（<code>HEAD</code>指针指向的分支）</li>
+</ul>
 </li>
-<li><pre><code class="shell">git branch --merged
-&lt;!--hexoPostRenderEscape:&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 此命令查看哪些分支已经合并到当前分支，这些已经合并的分支可以用&amp;#96;git branch -d&amp;#96;删除&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   + 如果分支并没有合并，不能使用&amp;#96;-d&amp;#96;参数进行删除，因为Git考虑到文件的安全性，可以使用&amp;#96;-D&amp;#96;参数强制进行删除&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4. &amp;#96;&amp;#96;&amp;#96;shell&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;   git branch --no-merged&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;:hexoPostRenderEscape--&gt;
+<li><p>显示分支的提交信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -v</span><br></pre></td></tr></table></figure>
 
-+ 查看所有包含未合并工作的分支</code></pre>
+<ul>
+<li>此命令会列出所有分支，并显示每个分支最后一次的提交</li>
+</ul>
+</li>
+<li><p>显示分支合并信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch --merged</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此命令查看哪些分支已经合并到当前分支，这些已经合并的分支可以用<code>git branch -d</code>删除</li>
+<li>如果分支并没有合并，不能使用<code>-d</code>参数进行删除，因为Git考虑到文件的安全性，可以使用<code>-D</code>参数强制进行删除</li>
+</ul>
+</li>
+<li><p>显示未合并信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch --no-merged</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看所有包含未合并工作的分支</li>
+</ul>
 </li>
 <li><p>分支的流水线图示意：</p>
 <p><img src="lr-branches-1.png" alt="lr-branches-1"></p>
@@ -494,7 +654,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-Learning"><span class="nav-number">1.</span> <span class="nav-text">Git Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%9F%BA%E7%A1%80"><span class="nav-number">1.1.</span> <span class="nav-text">Git 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96Git%E4%BB%93%E5%BA%93"><span class="nav-number">1.1.1.</span> <span class="nav-text">获取Git仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%92%A4%E9%94%80%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.2.</span> <span class="nav-text">撤销操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6%E2%80%94%E2%80%94%E5%88%86%E6%94%AF%E6%B5%81%E7%A8%8B%E5%88%9D%E6%8E%A2"><span class="nav-number">1.1.3.</span> <span class="nav-text">分支的新建与合并——分支流程初探</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86"><span class="nav-number">1.1.4.</span> <span class="nav-text">分支管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF"><span class="nav-number">1.1.5.</span> <span class="nav-text">远程分支</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-Learning"><span class="nav-number">1.</span> <span class="nav-text">Git Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%9F%BA%E7%A1%80"><span class="nav-number">1.1.</span> <span class="nav-text">Git 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96Git%E4%BB%93%E5%BA%93"><span class="nav-number">1.1.1.</span> <span class="nav-text">获取Git仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%E6%AF%8F%E6%AC%A1%E6%9B%B4%E6%96%B0%E5%88%B0%E4%BB%93%E5%BA%93"><span class="nav-number">1.1.2.</span> <span class="nav-text">记录每次更新到仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%92%A4%E9%94%80%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.3.</span> <span class="nav-text">撤销操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-number">1.1.4.</span> <span class="nav-text">远程仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%88%86%E6%94%AF"><span class="nav-number">1.2.</span> <span class="nav-text">Git 分支</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.1.</span> <span class="nav-text">分支介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E5%88%9B%E5%BB%BA%E5%92%8C%E5%88%87%E6%8D%A2"><span class="nav-number">1.2.2.</span> <span class="nav-text">分支创建和切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6%E2%80%94%E2%80%94%E5%88%86%E6%94%AF%E6%B5%81%E7%A8%8B%E5%88%9D%E6%8E%A2"><span class="nav-number">1.2.3.</span> <span class="nav-text">分支的新建与合并——分支流程初探</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86"><span class="nav-number">1.2.4.</span> <span class="nav-text">分支管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF"><span class="nav-number">1.2.5.</span> <span class="nav-text">远程分支</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
