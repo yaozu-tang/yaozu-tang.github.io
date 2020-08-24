@@ -3,12 +3,12 @@ title: About Yaozu Tang
 date: 2020-8-14
 --- 
 
-### EDUCATION
+## EDUCATION
 ---
 **University of Science and Technology of China**
 + BS in Applied Physics (Condensed Matter)  
 
-### RESEARCH EXPERIENCE
+## RESEARCH EXPERIENCE
 ---
 **University of Science and Technology of China** (Hehei, China)
 `Research Assistant to Professor Zhenyu Zhan` (July 2020 – Present)
@@ -45,7 +45,7 @@ variational principle and the multiple Davydov D2 ansatz with the help of senior
 + Studied and designed the surface structure of the quartz screen
 + Cooperated with the Mico-nanofabrication center to fabricate the samples
 
-### LEARDERSHIP AND COMMUNITY ACTIVITIES
+## LEARDERSHIP AND COMMUNITY ACTIVITIES
 ---
 **The 22nd China Daily “21st Century Coca-Cola Cup” National English Speaking Competition** (Hefei, China)
 `Competitor` (Nov 2016 – Dec 2016)
