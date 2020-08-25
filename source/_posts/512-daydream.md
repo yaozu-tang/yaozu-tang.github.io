@@ -1,7 +1,7 @@
 ---
 title: 5.12的遐想
 date: 2020-08-12 22:30:22
-tags: writing
+tags: tragedy
 categories: writing
 description: 关于5.12大地震的遐想与反思
 ---

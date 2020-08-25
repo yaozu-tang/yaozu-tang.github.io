@@ -1,7 +1,7 @@
 ---
 title: 当我们谈论年轻人的时候，我们在谈论什么
 date: 2020-08-13 01:23:25
-tags: writing
+tags: young generation
 categories: writing
 description: 2020年五月四日观看b站演讲《后浪》后，一个顶普通的年轻人的遐思
 ---
