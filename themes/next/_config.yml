@@ -118,6 +118,7 @@ darkmode: false
 menu:
   home: / || fa fa-home
   CV: /cv/ || fa fa-user
+  Research: /categories/research || fas fa-microscope
   Writing: /categories/writing || fas fa-feather-alt
   Learning: /categories/learning || fab fa-leanpub
   #tags: /tags/ || fa fa-tags
