@@ -1,5 +1,5 @@
 ---
-title: About Yaozu Tang
+title: Yaozu Tang's CV
 date: 2020-8-14
 --- 
 
