@@ -121,7 +121,7 @@ menu:
   Research: /categories/research || fas fa-microscope
   Writing: /categories/writing || fas fa-feather-alt
   Learning: /categories/learning || fab fa-leanpub
-  #tags: /tags/ || fa fa-tags
+  tags: /tags/ || fa fa-tags
   categories: /categories/ || fa fa-th
   archives: /archives/ || fa fa-archive
   #schedule: /schedule/ || fa fa-calendar
